@@ -331,6 +331,16 @@ jobs:
             fi
           fi
 
+
+
+      - name: Add make name
+        run: |
+          cd kernel_workspace/kernel_platform
+            if [[ "${{ github.event.inputs.KERNEL_VERSION }}" == "6.1" || "${{ github.event.inputs.KERNEL_VERSION }}" == "6.6" ]]; then
+              sed -i "/stable_scmversion_cmd/s/-maybe-dirty//g" ./build/kernel/kleaf/impl/stamp.bzl
+            fi
+            sed -i '$s|echo "\$res"|echo "-build-by-misaka-no.114514"|' ./common/scripts/setlocalversion
+            
       - name: Build kernel
         if: ${{ github.event.inputs.CPU == 'sm8650' || github.event.inputs.CPU == 'sm7675' }}
         run: |
